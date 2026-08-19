@@ -1,0 +1,10 @@
+import {Router} from "express";
+import {createTask,getRoomTasks,updateTask,deleteTask} from "../controllers/task.controller.js";
+import authMiddleware from"../middlewares/auth.middleware.js";
+import Room from "../models/Room.js";
+const router=Router();
+router.post("/rooms/:roomId/tasks",authMiddleware,createTask);
+router.get("/rooms/:roomId/tasks",authMiddleware,getRoomTasks);
+router.put("/tasks/:taskId",authMiddleware,updateTask);
+router.delete("/tasks/:taskId",authMiddleware,deleteTask);
+export default router;
