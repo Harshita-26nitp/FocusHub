@@ -85,18 +85,59 @@ export const getRoomDetailsService=async(roomId)=>{
     }
      return room;
 }
-export const updateRoomService=async(roomId,user)=>{
-    const room=await Room.findById(roomId);
-    if(!room){
+export const updateRoomService = async (roomId, roomData, user) => {
+    const room = await Room.findById(roomId);
+
+    if (!room) {
         throw new Error("Room not found");
     }
-    if(!room.host.equals(user._id)){
-          throw new Error("Only the host can update this room");
+
+    if (!room.host.equals(user._id)) {
+        throw new Error("Only the host can update this room");
     }
-    room=req.body;
-     
+
+    const {
+        name,
+        description,
+        subject,
+        maxParticipants,
+        isPrivate
+    } = roomData;
+
+    if (name !== undefined) {
+        if (!name.trim()) {
+            throw new Error("Room name cannot be empty");
+        }
+
+        room.name = name.trim();
+    }
+
+    if (description !== undefined) {
+        room.description = description;
+    }
+
+    if (subject !== undefined) {
+        room.subject = subject;
+    }
+
+    if (maxParticipants !== undefined) {
+        if (maxParticipants < room.participants.length) {
+            throw new Error(
+                "Maximum participants cannot be less than current participants"
+            );
+        }
+
+        room.maxParticipants = maxParticipants;
+    }
+
+    if (isPrivate !== undefined) {
+        room.isPrivate = isPrivate;
+    }
+
+    await room.save();
+
     return room;
-}
+};
 
 export const deleteRoomService=async(roomId,user)=>{
      const room=await Room.findById(roomId);

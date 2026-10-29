@@ -1,3 +1,4 @@
+import onlineUsers from "./onlineUsers.js";
 export const registerRoomSocket=(io)=>{
 
     io.on("connection",(socket)=>{

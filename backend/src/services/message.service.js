@@ -18,7 +18,7 @@ export const createMessageService=async(roomId,User,content)=>{
     }
     const message=await Message.create({
         room:roomId,
-        sender:user._id,
+        sender:User._id,
         content:content.trim()
     });
     return await message.populate(

@@ -1,5 +1,5 @@
 import{startFocusSessionService,getRoomFocusSessionsService,completeFocusSessionService,cancelFocusSessionService} from "../services/focusSession.service.js";
-export const startFocysSession=async(req,res)=>{
+export const startFocusSession=async(req,res)=>{
     try{
         const session=await startFocusSessionService(req.params.roomId,req.user,req.body.duration);
         res.status(201).json({
@@ -38,7 +38,7 @@ export const getRoomFocusSessions=async(req,res)=>{
             res.status(200).json({
                 success:true,
                 message:"Focus session completed successfully",
-                date:session
+                data:session
             });
         }
         catch(error){
