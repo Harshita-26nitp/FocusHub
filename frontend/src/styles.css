@@ -42,4 +42,21 @@ button { cursor: pointer; }
 .focus-panel .text-slate-400 { color: #64748B !important; }
 .panel.bg-gradient-to-br { background: #EDE9FE; color: #334155; }
 .panel.bg-gradient-to-br .text-violet-100 { color: #64748B; }
+.brand-wordmark { color: #2F3E63; font-size: 20px; font-weight: 800; letter-spacing: -.04em; }
+.brand-wordmark span { color: #7B8FB7; }
+.brand-wordmark-light { color: #FFFFFF; }
+.brand-wordmark-light span { color: #F5C66B; }
+.auth-art { background: #2F3E63 url('/focus-study.jpeg') center / cover no-repeat; }
+.auth-art-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(25,36,64,.88), rgba(47,62,99,.38)); }
+.homepage-hero { display: grid; min-height: 330px; grid-template-columns: 1fr .85fr; border-radius: 24px; background: #2F3E63; box-shadow: 0 14px 28px rgba(47,62,99,.18); }
+.hero-copy { padding: 38px; }
+.hero-eyebrow { color: #BFDBFE; }
+.hero-accent { color: #F5C66B; }
+.hero-button { display: inline-flex; align-items: center; gap: 8px; border-radius: 12px; background: #F5C66B; padding: 12px 17px; color: #2F3E63; font-size: 13px; font-weight: 800; }
+.hero-button:hover { background: #F8D98D; }
+.hero-link { padding: 12px 4px; color: #DBEAFE; font-size: 13px; font-weight: 700; }
+.hero-link:hover { color: #FFFFFF; }
+.hero-image-wrap { min-height: 330px; overflow: hidden; background: #65779E; }
+.hero-image { height: 100%; width: 100%; object-fit: cover; object-position: center; }
+@media (max-width: 768px) { .homepage-hero { grid-template-columns: 1fr; }.hero-copy { padding: 28px; }.hero-image-wrap { min-height: 220px; } }
 @media (max-width: 640px) { .timer-ring { height: 220px; width: 220px; }.timer-inner { height: 190px; width: 190px; } }

@@ -6,7 +6,7 @@ export async function apiRequest(path, options = {}) {
   try {
     response = await fetch(`${env.apiUrl}${path}`, {
       ...options,
-      headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers },
+      headers: {'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers },
       body: options.body && typeof options.body !== 'string' ? JSON.stringify(options.body) : options.body,
     })
   } catch {
@@ -20,4 +20,4 @@ export const authApi = { login: (body) => apiRequest('/auth/login', { method: 'P
 export const roomApi = { list: () => apiRequest('/rooms'), mine: () => apiRequest('/rooms/my-rooms'), details: (id) => apiRequest(`/rooms/${id}`), create: (body) => apiRequest('/rooms', { method: 'POST', body }), join: (id) => apiRequest(`/rooms/${id}/join`, { method: 'POST' }), leave: (id) => apiRequest(`/rooms/${id}/leave`, { method: 'POST' }) }
 export const taskApi = { list: (id) => apiRequest(`/rooms/${id}/tasks`), create: (id, body) => apiRequest(`/rooms/${id}/tasks`, { method: 'POST', body }), update: (id, body) => apiRequest(`/tasks/${id}`, { method: 'PUT', body }), remove: (id) => apiRequest(`/tasks/${id}`, { method: 'DELETE' }) }
 export const messageApi = { list: (id) => apiRequest(`/rooms/${id}/messages`) }
-export const focusApi = { list: (id) => apiRequest(`/rooms/${id}/focus-sessions`), start: (id, duration) => apiRequest(`/rooms/${id}/focus-sessions`, { method: 'POST', body: { duration } }), complete: (id) => apiRequest(`/focus-sessions/${id}/complete`, { method: 'PUT' }), cancel: (id) => apiRequest(`/focus-sessions/${id}/cancel`, { method: 'PUT' }) }
+export const focusApi = { start: (id, duration) => apiRequest(`/rooms/${id}/focus-sessions`, { method: 'POST', body: { duration } }), complete: (id) => apiRequest(`/focus-sessions/${id}/complete`, { method: 'PUT' }), cancel: (id) => apiRequest(`/focus-sessions/${id}/cancel`, { method: 'PUT' }) }
