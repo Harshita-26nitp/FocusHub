@@ -1,22 +1,51 @@
 # FocusHub
 
-FocusHub is a collaborative deep-work platform for students. Users can create or join study rooms, communicate in real time, manage room tasks, and record focused work sessions in one workspace.
+FocusHub is a collaborative deep-work platform for students. It brings study rooms, real-time communication, task management, and focus-session tracking together in one workspace.
 
-## Highlights
+The project is organized as a React/Vite frontend and an Express/MongoDB backend. REST APIs handle persistent application data, while Socket.IO provides real-time room and chat functionality.
+
+## Features
+
+### Authentication and users
 
 - JWT authentication with bcrypt password hashing
+- User registration, login, profile retrieval, and logout
+- Protected REST API requests using Bearer tokens
+
+### Study rooms
+
 - Public study rooms with host-based authorization
 - Room creation, joining, leaving, updating, and deletion
-- Real-time room chat and online presence with Socket.IO
-- Room task management with status and priority
-- Focus-session tracking
-- Demo mode for exploring the frontend without a backend
+- Room details, participant management, and host permissions
+
+### Real-time collaboration
+
+- Live room chat with Socket.IO
+- Online-user presence
+- Authenticated Socket.IO connections
+- Persistent message history through the REST API
+
+### Tasks and focus sessions
+
+- Create, view, update, and delete room tasks
+- Task status and priority management
+- Start, view, complete, and cancel focus sessions
+
+### Frontend experience
+
+- React single-page application with Vite
+- Dashboard and dedicated room workspace
+- Responsive sidebar and navigation
+- Login, registration, create-room, and join-room flows
+- Toast notifications for user feedback
+- Demo mode for exploring the interface without a running backend
 
 ## Tech stack
 
 **Frontend:** React, Vite, Tailwind CSS, Lucide React, Socket.IO Client  
-**Backend:** Node.js, Express, MongoDB, Mongoose, JWT, bcrypt, Socket.IO  
-**Tools:** Git, GitHub, Postman, VS Code
+**Backend:** Node.js, Express, MongoDB, Mongoose, JWT, bcrypt, Socket.IO, Zod
+**Security and middleware:** Helmet, CORS, compression, cookie-parser, express-rate-limit
+**Tools:** Git, GitHub, Postman, VS Code, Nodemon
 
 ## Architecture
 
@@ -135,14 +164,6 @@ Message creation and live room events are handled through Socket.IO.
 3. Authentication middleware verifies the token and attaches the user to the request.
 4. Socket.IO authenticates the handshake with the same JWT.
 5. Authenticated clients join room channels and receive messages and presence updates in real time.
-
-## Interview talking points
-
-- **Why layered architecture?** It keeps route handling, business rules, database access, and transport-specific code independently maintainable.
-- **How is access controlled?** JWT middleware identifies the user, while service/controller checks enforce room membership and host permissions.
-- **Why Socket.IO?** Chat and online presence need server-pushed updates; polling would add latency and unnecessary requests.
-- **How would you scale it?** Add validation and tests, paginate messages/tasks, use a Socket.IO Redis adapter for multiple server instances, and add centralized logging/monitoring.
-- **What would you improve next?** Add automated tests, stronger production CORS configuration, refresh-token handling, rate limits on authentication, and deployment documentation.
 
 ## Security notes
 
