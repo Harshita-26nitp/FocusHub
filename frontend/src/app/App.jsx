@@ -25,11 +25,11 @@ export default function App() {
     try { if (env.demoMode) { setUser({ ...mockUser, fullName: form.fullName || mockUser.fullName, email: form.email || mockUser.email, username: form.username || mockUser.username }); 
     localStorage.setItem('focushub_user', JSON.stringify(mockUser)); return } const result = authMode === 'register' ? await authApi.register(form) : await authApi.login(form); 
     const loggedIn = authMode === 'register' ? await authApi.login({ email: form.email, password: form.password }) : result; 
-    localStorage.setItem('focushub_token', loggedIn.token); localStorage.setItem('focushub_user', JSON.stringify(loggedIn.user)); setUser(loggedIn.user) } catch (error) { notify(error.message); throw error } }
+    localStorage.setItem('focushub_user', JSON.stringify(loggedIn.user)); setUser(loggedIn.user) } catch (error) { notify(error.message); throw error } }
   const createRoom = async (form) => { try { const room = env.demoMode ? { _id: `room-${Date.now()}`, ...form, participants: [{ _id: 'you' }], host: { fullName: user.fullName }, isSessionActive: false } : await roomApi.create(form); setRooms((current) => [room, ...current]); setActiveRoom(room); setPage('room'); setModal(null); notify('Your room is ready to go') } catch (error) { notify(error.message) } }
   const joinRoom = async (id) => { try { if (!env.demoMode) await roomApi.join(id); const room = rooms.find((item) => item._id === id) || rooms[0]; setActiveRoom(room); setPage('room'); setModal(null); notify('Joined room successfully') } catch (error) { notify(error.message) } }
   const openRoom = (room) => { setActiveRoom(room); setPage('room'); setSidebarOpen(false) }
-  const logout = () => { localStorage.removeItem('focushub_user'); localStorage.removeItem('focushub_token'); setUser(null) }
+  const logout = async () => { try { await authApi.logout() } finally { localStorage.removeItem('focushub_user'); setUser(null) } }
   if (!user) 
   return <AuthScreen mode={authMode} 
   onSubmit={authenticate} 
@@ -43,4 +43,3 @@ export default function App() {
         {page === 'dashboard' ? <DashboardPage rooms={rooms} user={user} onOpenRoom={openRoom} onCreate={() => setModal('create')} onJoin={() => setModal('join')} /> : <RoomPage room={activeRoom} user={user} notify={notify} />}
         </main>{modal === 'create' && <CreateRoomModal onClose={() => setModal(null)} onSubmit={createRoom} />}{modal === 'join' && <JoinRoomModal onClose={() => setModal(null)} onSubmit={joinRoom} />}{toast && <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white shadow-2xl">{toast}</div>}</div>
 }
-

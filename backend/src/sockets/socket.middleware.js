@@ -6,7 +6,11 @@ const socketAuthMiddleware = async (socket, next) => {
 
     try {
 
-        const token = socket.handshake.auth.token;
+        const token = socket.handshake.headers.cookie
+            ?.split(";")
+            .map((cookie) => cookie.trim())
+            .find((cookie) => cookie.startsWith(`${env.AUTH_COOKIE_NAME}=`))
+            ?.split("=")[1];
 
         if (!token) {
             return next(new Error("Authentication failed"));

@@ -16,7 +16,7 @@ export const registerUserService =async(userData)=>{
         email,
         password:hashedPassword
     });
-    return user;
+    return user.toObject({ transform: (_document, returnedUser) => { delete returnedUser.password; } });
 }
 export const loginUserService=async(userData)=>{
     const {email,password}=userData;
@@ -34,7 +34,7 @@ export const loginUserService=async(userData)=>{
     }
       const token=generateToken(user._id);
       return{
-        user,
+        user: user.toObject({ transform: (_document, returnedUser) => { delete returnedUser.password; } }),
         token
       };
 

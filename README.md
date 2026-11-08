@@ -8,9 +8,9 @@ The project is organized as a React/Vite frontend and an Express/MongoDB backend
 
 ### Authentication and users
 
-- JWT authentication with bcrypt password hashing
+- JWT authentication with bcrypt password hashing and HTTP-only cookies
 - User registration, login, profile retrieval, and logout
-- Protected REST API requests using Bearer tokens
+- Protected REST API requests authenticated from the auth cookie
 
 ### Study rooms
 
@@ -106,6 +106,7 @@ Set the values in `backend/.env`:
 PORT=8000
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_long_random_secret
+AUTH_COOKIE_NAME=focushub_token
 NODE_ENV=development
 ```
 
@@ -149,7 +150,7 @@ All routes are prefixed with `/api/v1`.
 
 | Area | Routes |
 | --- | --- |
-| Auth | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` |
+| Auth | `POST /auth/register`, `POST /auth/login`, `POST /auth/logout`, `GET /auth/me` |
 | Rooms | `GET /rooms`, `POST /rooms`, `GET /rooms/:roomId`, `POST /rooms/:roomId/join`, `POST /rooms/:roomId/leave` |
 | Tasks | `POST /rooms/:roomId/tasks`, `GET /rooms/:roomId/tasks`, `PUT /tasks/:taskId`, `DELETE /tasks/:taskId` |
 | Focus sessions | `POST /rooms/:roomId/focus-sessions`, `GET /rooms/:roomId/focus-sessions`, completion/cancellation routes |
@@ -159,17 +160,21 @@ Message creation and live room events are handled through Socket.IO.
 
 ## Authentication and real-time flow
 
-1. A user registers or logs in; the backend hashes passwords with bcrypt and returns a JWT.
-2. Protected REST requests send the JWT as a Bearer token.
+1. A user registers or logs in; the backend hashes passwords with bcrypt and creates a JWT.
+2. The backend stores the JWT in an HTTP-only authentication cookie.
 3. Authentication middleware verifies the token and attaches the user to the request.
-4. Socket.IO authenticates the handshake with the same JWT.
+4. Socket.IO authenticates the handshake using the same cookie.
 5. Authenticated clients join room channels and receive messages and presence updates in real time.
 
 ## Security notes
 
 - Never commit `.env` files or real database credentials.
 - Use a long, randomly generated `JWT_SECRET` outside local development.
-- Configure CORS with the deployed frontend origin before production.
+- Authentication cookies use `HttpOnly` so frontend JavaScript cannot read them.
+- Authentication cookies use `Secure` in production and `SameSite` protection.
+- Frontend requests use credentials, while backend CORS allows only configured frontend origins.
+- Configure CORS and cookie settings with the deployed frontend origin before production.
+- Add CSRF tokens if the deployment becomes cross-site or supports state-changing requests from multiple origins.
 
 ## License
 
